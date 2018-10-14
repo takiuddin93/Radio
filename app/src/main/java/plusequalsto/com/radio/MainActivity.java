@@ -57,14 +57,21 @@ public class MainActivity extends AppCompatActivity {
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
                 if (newState == BottomSheetBehavior.STATE_COLLAPSED) {
                     tapactionlayout.setVisibility(View.VISIBLE);
+                    arrowUp.setImageResource(R.drawable.ic_keyboard_arrow_up_black_24dp);
+                    playpauseIcon.setVisibility(View.VISIBLE);
+
                 }
 
                 if (newState == BottomSheetBehavior.STATE_EXPANDED) {
                     tapactionlayout.setVisibility(View.VISIBLE);
+                    arrowUp.setImageResource(R.drawable.ic_keyboard_arrow_down_black_24dp);
+                    playpauseIcon.setVisibility(View.GONE);
                 }
 
                 if (newState == BottomSheetBehavior.STATE_DRAGGING) {
                     tapactionlayout.setVisibility(View.VISIBLE);
+                    arrowUp.setImageResource(R.drawable.ic_keyboard_arrow_down_black_24dp);
+                    playpauseIcon.setVisibility(View.GONE);
                 }
             }
 
