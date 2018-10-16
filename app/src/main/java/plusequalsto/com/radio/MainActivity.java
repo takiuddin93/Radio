@@ -1,21 +1,25 @@
 package plusequalsto.com.radio;
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -28,24 +32,37 @@ import static android.widget.Toast.LENGTH_LONG;
 
 public class MainActivity extends AppCompatActivity {
 
-
     LinearLayout tapactionlayout;
     ConstraintLayout lol;
     ImageView arrowUp, playpauseIcon;
     View bottomSheet;
     RelativeLayout.LayoutParams  tap_action_layout;
 
-    ListView listView;
-
     private BottomSheetBehavior mBottomSheetBehavior;
+
+    private RecyclerView recyclerView;
+    private ProgressBar progressBar;
+    private LinearLayoutManager mLayoutManager;
+
+    private ArrayList<Model> list;
+    private RecyclerViewAdapter adapter;
+
+    private String baseURL = "http://www.plusequalsto.com/radio/";
+    public static List<Schedule> mSchedule;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        getSchedule();
+
+        arrowUp = (ImageView) findViewById(R.id.arrowUp);
+        playpauseIcon = (ImageView) findViewById(R.id.playpause);
         tapactionlayout = (LinearLayout) findViewById(R.id.tap_action_layout);
+        bottomSheet = (View) findViewById(R.id.bottom_sheet);
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
         lol = (ConstraintLayout) findViewById(R.id.lol);
+
         ViewTreeObserver vto = lol.getViewTreeObserver();
         vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
             public boolean onPreDraw() {
@@ -58,9 +75,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        arrowUp = (ImageView) findViewById(R.id.arrowUp);
-        playpauseIcon = (ImageView) findViewById(R.id.playpause);
-        bottomSheet = findViewById(R.id.bottom_sheet);
         mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
         mBottomSheetBehavior.setPeekHeight(158);
         mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
@@ -94,6 +108,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        mLayoutManager = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(mLayoutManager);
+
+        list = new ArrayList<Model>();
+
+        getRetrofit();
+
+        adapter = new RecyclerViewAdapter(list, MainActivity.this);
+        recyclerView.setAdapter(adapter);
+
         tapactionlayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -111,39 +135,33 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void getSchedule() {
+    private void getRetrofit() {
+
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(Api.BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create()) //Here we are using the GsonConverterFactory to directly convert json data to object
+                .baseUrl(baseURL)
+                .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        Api api = retrofit.create(Api.class);
-
-        Call<List<Schedule>> call = api.getSchedules();
+        Api service = retrofit.create(Api.class);
+        Call<List<Schedule>> call = service.getSchedules();
 
         call.enqueue(new Callback<List<Schedule>>() {
             @Override
             public void onResponse(Call<List<Schedule>> call, Response<List<Schedule>> response) {
-                List<Schedule> scheduleList = response.body();
+                mSchedule = response.body();
+                progressBar.setVisibility(View.GONE);
+                Log.d("hagu", String.valueOf(mSchedule.size()));
 
-                //Creating an String array for the ListView
-                String[] schedules = new String[scheduleList.size()];
-
-                //looping through all the heroes and inserting the names inside the string array
-                for (int i = 0; i < scheduleList.size(); i++) {
-                    schedules[i] = scheduleList.get(i).getDay();
+                for (int i = 0; i < mSchedule.size(); i++) {
+                    list.add(new Model(Model.IMAGE_TYPE, mSchedule.get(i).getDay().getRendered(), mSchedule.get(i).getShow().getRendered(), mSchedule.get(i).getTime().getRendered()));
                 }
-
-
-                //displaying the string array into listview
-                listView.setAdapter(new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, schedules));
-
+                adapter.notifyDataSetChanged();
             }
 
             @Override
             public void onFailure(Call<List<Schedule>> call, Throwable t) {
-                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
+
 }
