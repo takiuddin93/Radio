@@ -9,4 +9,10 @@ public interface Api {
 
     @GET("schedule.json")
     Call<List<Schedule>> getSchedules();
+
+    @GET("test.json")
+    Call<List<Test>> getTest();
+
+    @GET("mysql_to_json.php")
+    Call<List<Complaints>> getComplaints();
 }

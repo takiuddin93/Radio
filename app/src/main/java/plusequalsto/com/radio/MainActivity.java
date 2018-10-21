@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerViewAdapter adapter;
 
     private String baseURL = "http://www.plusequalsto.com/radio/";
-    public static List<Schedule> mSchedule;
+    public static List<Test> mSchedule;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,23 +143,24 @@ public class MainActivity extends AppCompatActivity {
                 .build();
 
         Api service = retrofit.create(Api.class);
-        Call<List<Schedule>> call = service.getSchedules();
+        Call<List<Test>> call = service.getTest();
 
-        call.enqueue(new Callback<List<Schedule>>() {
+        call.enqueue(new Callback<List<Test>>() {
             @Override
-            public void onResponse(Call<List<Schedule>> call, Response<List<Schedule>> response) {
+            public void onResponse(Call<List<Test>> call, Response<List<Test>> response) {
                 mSchedule = response.body();
                 progressBar.setVisibility(View.GONE);
                 Log.d("hagu", String.valueOf(mSchedule.size()));
 
                 for (int i = 0; i < mSchedule.size(); i++) {
-                    list.add(new Model(Model.IMAGE_TYPE, mSchedule.get(i).getDay().getRendered(), mSchedule.get(i).getShow().getRendered(), mSchedule.get(i).getTime().getRendered()));
+                    Log.d("hagu", String.valueOf(mSchedule.get(i).getDay()));
+                    list.add(new Model(Model.IMAGE_TYPE, mSchedule.get(i).getDay(), mSchedule.get(i).getShow(), mSchedule.get(i).getTime()));
                 }
                 adapter.notifyDataSetChanged();
             }
 
             @Override
-            public void onFailure(Call<List<Schedule>> call, Throwable t) {
+            public void onFailure(Call<List<Test>> call, Throwable t) {
             }
         });
     }
