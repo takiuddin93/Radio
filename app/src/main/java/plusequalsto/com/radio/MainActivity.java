@@ -18,7 +18,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
