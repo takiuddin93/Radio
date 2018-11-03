@@ -13,6 +13,6 @@ public interface Api {
     @GET("test.json")
     Call<List<Test>> getTest();
 
-    @GET("mysql_to_json.php")
+    @GET("menu.json")
     Call<List<Complaints>> getComplaints();
 }

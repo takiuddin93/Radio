@@ -1,90 +1,42 @@
 package plusequalsto.com.radio;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+        import com.google.gson.annotations.Expose;
+        import com.google.gson.annotations.SerializedName;
 
 public class Schedule {
 
     @SerializedName("Day")
     @Expose
-    private Day day;
+    private String day;
     @SerializedName("Show")
     @Expose
-    private Show show;
+    private String show;
     @SerializedName("Time")
     @Expose
-    private Time time;
+    private String time;
 
-    public Day getDay() {
+    public String getDay() {
         return day;
     }
 
-    public void setDay(Day day) {
+    public void setDay(String day) {
         this.day = day;
     }
 
-    public Show getShow() {
+    public String getShow() {
         return show;
     }
 
-    public void setShow(Show show) {
+    public void setShow(String show) {
         this.show = show;
     }
 
-    public Time getTime() {
+    public String getTime() {
         return time;
     }
 
-    public void setTime(Time time) {
+    public void setTime(String time) {
         this.time = time;
-    }
-
-    public class Day {
-
-        @SerializedName("rendered")
-        @Expose
-        private String rendered;
-
-        public String getRendered() {
-            return rendered;
-        }
-
-        public void setRendered(String rendered) {
-            this.rendered = rendered;
-        }
-
-    }
-
-    public class Show {
-
-        @SerializedName("rendered")
-        @Expose
-        private String rendered;
-
-        public String getRendered() {
-            return rendered;
-        }
-
-        public void setRendered(String rendered) {
-            this.rendered = rendered;
-        }
-
-    }
-
-    public class Time {
-
-        @SerializedName("rendered")
-        @Expose
-        private String rendered;
-
-        public String getRendered() {
-            return rendered;
-        }
-
-        public void setRendered(String rendered) {
-            this.rendered = rendered;
-        }
-
     }
 
 }
