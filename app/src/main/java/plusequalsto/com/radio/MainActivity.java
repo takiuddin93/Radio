@@ -8,6 +8,9 @@ import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.TabItem;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -42,17 +45,19 @@ public class MainActivity extends AppCompatActivity {
     View bottomSheet;
     RelativeLayout.LayoutParams  tap_action_layout;
 
+    ViewPager viewPage;
+    ViewPagerAdapter viewPagerAdapter;
+    TabLayout menuTabs;
+
+    TabItem tabSunday;
+    TabItem tabMonday;
+    TabItem tabTuesday;
+    TabItem tabWednesday;
+    TabItem tabThursday;
+    TabItem tabFriday;
+    TabItem tabSaturday;
+
     private BottomSheetBehavior mBottomSheetBehavior;
-
-    private RecyclerView recyclerView;
-    private ProgressBar progressBar;
-    private LinearLayoutManager mLayoutManager;
-
-    private ArrayList<Model> list;
-    private RecyclerViewAdapter adapter;
-
-    private String baseURL = "http://www.plusequalsto.com/radio/";
-    public static List<Schedule> mSchedule;
 
     private RadioService mRadioService;
     private boolean mBoundToRadioService;
@@ -87,9 +92,84 @@ public class MainActivity extends AppCompatActivity {
         tapactionlayout = (LinearLayout) findViewById(R.id.tap_action_layout);
         bottomSheet = (View) findViewById(R.id.bottom_sheet);
         playpause = (ImageView) findViewById(R.id.playpause);
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
         lol = (ConstraintLayout) findViewById(R.id.lol);
+
+        menuTabs = (TabLayout) findViewById(R.id.menuTabs);
+
+        tabSunday = findViewById(R.id.tabSunday);
+        tabMonday = findViewById(R.id.tabMonday);
+        tabTuesday = findViewById(R.id.tabTuesday);
+        tabWednesday = findViewById(R.id.tabWednesday);
+        tabThursday = findViewById(R.id.tabThursday);
+        tabFriday = findViewById(R.id.tabFriday);
+        tabSaturday = findViewById(R.id.tabSaturday);
+
+        viewPage = (ViewPager) findViewById(R.id.viewPage);
+        viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), menuTabs.getTabCount());
+        viewPage.setAdapter(viewPagerAdapter);
+
+//        setupTabIcons();
+
+        menuTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPage.setCurrentItem(tab.getPosition());
+//                if (tab.getPosition() == 1) {
+//                    toolbar.setBackgroundColor(ContextCompat.getColor(MainActivity.this, R.color.colorAccent));
+//                    menuTabs.setBackgroundColor(ContextCompat.getColor(MainActivity.this, R.color.colorAccent));
+//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                        getWindow().setStatusBarColor(ContextCompat.getColor(MainActivity.this, R.color.colorAccent));
+//                    }
+//                } else if (tab.getPosition() == 2) {
+//                    toolbar.setBackgroundColor(ContextCompat.getColor(MainActivity.this, android.R.color.darker_gray));
+//                    menuTabs.setBackgroundColor(ContextCompat.getColor(MainActivity.this, android.R.color.darker_gray));
+//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                        getWindow().setStatusBarColor(ContextCompat.getColor(MainActivity.this, android.R.color.darker_gray));
+//                    }
+//                } else if (tab.getPosition() == 3) {
+//                    toolbar.setBackgroundColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary));
+//                    menuTabs.setBackgroundColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary));
+//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                        getWindow().setStatusBarColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimaryDark));
+//                    }
+//                } else if (tab.getPosition() == 4) {
+//                    toolbar.setBackgroundColor(ContextCompat.getColor(MainActivity.this, R.color.colorAccent));
+//                    menuTabs.setBackgroundColor(ContextCompat.getColor(MainActivity.this, R.color.colorAccent));
+//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                        getWindow().setStatusBarColor(ContextCompat.getColor(MainActivity.this, R.color.colorAccent));
+//                    }
+//                } else if (tab.getPosition() == 5) {
+//                    toolbar.setBackgroundColor(ContextCompat.getColor(MainActivity.this, android.R.color.darker_gray));
+//                    menuTabs.setBackgroundColor(ContextCompat.getColor(MainActivity.this, android.R.color.darker_gray));
+//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                        getWindow().setStatusBarColor(ContextCompat.getColor(MainActivity.this, android.R.color.darker_gray));
+//                    }
+//                } else if (tab.getPosition() == 6) {
+//                    toolbar.setBackgroundColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary));
+//                    menuTabs.setBackgroundColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary));
+//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                        getWindow().setStatusBarColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimaryDark));
+//                    }
+//                } else {
+//                    toolbar.setBackgroundColor(ContextCompat.getColor(MainActivity.this, R.color.colorAccent));
+//                    menuTabs.setBackgroundColor(ContextCompat.getColor(MainActivity.this, R.color.colorAccent));
+//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                        getWindow().setStatusBarColor(ContextCompat.getColor(MainActivity.this, R.color.colorAccent));
+//                    }
+//                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+        viewPage.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(menuTabs));
 
         ViewTreeObserver vto = lol.getViewTreeObserver();
         vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
@@ -102,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
-        mBottomSheetBehavior.setPeekHeight(158);
+        mBottomSheetBehavior.setPeekHeight(168);
         mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
 
         mBottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
@@ -134,17 +214,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-        mLayoutManager = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.VERTICAL, false);
-        recyclerView.setLayoutManager(mLayoutManager);
-
-        list = new ArrayList<Model>();
-
-        getRetrofit();
-
-        adapter = new RecyclerViewAdapter(list, MainActivity.this);
-        recyclerView.setAdapter(adapter);
-
         tapactionlayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -161,39 +230,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         setupPlaybackToolbar();
-    }
-
-    private void getRetrofit() {
-        Date today = new Date();
-        SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE");
-        final String todayDayOfWeek = dayFormat.format(today);
-        Log.d("todayDayOfWeek", todayDayOfWeek);
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(baseURL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        Api service = retrofit.create(Api.class);
-        Call<List<Schedule>> call = service.getSchedules();
-
-        call.enqueue(new Callback<List<Schedule>>() {
-            @Override
-            public void onResponse(Call<List<Schedule>> call, Response<List<Schedule>> response) {
-                mSchedule = response.body();
-                progressBar.setVisibility(View.GONE);
-                for (int i = 0; i < mSchedule.size(); i++) {
-                    if (mSchedule.get(i).getDay().equals(todayDayOfWeek)){
-                        list.add(new Model(Model.IMAGE_TYPE, mSchedule.get(i).getDay(), mSchedule.get(i).getShow(), mSchedule.get(i).getTime()));
-                    }
-                }
-                adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onFailure(Call<List<Schedule>> call, Throwable t) {
-            }
-        });
     }
 
     @Override
