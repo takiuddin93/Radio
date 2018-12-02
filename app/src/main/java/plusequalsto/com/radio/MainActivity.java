@@ -182,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
-        mBottomSheetBehavior.setPeekHeight(168);
+        mBottomSheetBehavior.setPeekHeight(158);
         mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
 
         mBottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
