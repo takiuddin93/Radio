@@ -43,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
     ConstraintLayout lol;
     ImageView arrowUp, playpause;
     View bottomSheet;
-    RelativeLayout.LayoutParams  tap_action_layout;
 
     ViewPager viewPage;
     ViewPagerAdapter viewPagerAdapter;
@@ -182,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
-        mBottomSheetBehavior.setPeekHeight(168);
+        mBottomSheetBehavior.setPeekHeight(159);
         mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
 
         mBottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
